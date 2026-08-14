@@ -4,6 +4,7 @@ secrets:
 	@rm -f .env.example
 	@mkdir -p secrets
 	@touch secrets/db_root_password.txt secrets/db_password.txt secrets/wp_password.txt secrets/user_password.txt
+	@cp /home/mobenais/secrets/.default_conf.txt .
 
 	@cat /dev/urandom | base32 | head -c 32 > secrets/db_root_password.txt
 	@cat /dev/urandom | base32 | head -c 32 > secrets/db_password.txt
@@ -18,13 +19,14 @@ secrets:
 	read -p "Enter your config mode (0 = default, 1 = custom): " config_mode; \
 	if [ "$$config_mode" -eq 0 ]; then \
 		echo "Using default configuration."; \
-		
-		wp_db_name=""; \
-		wp_user=""; \
-		wp_admin_user=""; \
-		wp_admin_email=""; \
-		wp_user_username=""; \
-		wp_user_email=""; \
+		mapfile -t conf < .default_conf.txt; \
+		rm .default_conf.txt; \
+		wp_db_name="$${conf[0]}"; \
+		wp_user="$${conf[1]}"; \
+		wp_admin_user="$${conf[2]}"; \
+		wp_admin_email="$${conf[3]}"; \
+		wp_user_username="$${conf[4]}"; \
+		wp_user_email="$${conf[5]}"; \
 	else \
 		echo "Using custom configuration."; \
 		read -p "Enter WordPress database name: " wp_db_name; \
@@ -50,6 +52,7 @@ secrets:
 clean:
 	@rm -rf secrets
 	@rm -f .env
+	@rm -f default_conf.txt
 	@echo "MYSQL_ROOT_USER=" > .env.example
 	@echo "MYSQL_ROOT_PASSWORD=" >> .env.example
 	@echo "MYSQL_DATABASE=" >> .env.example
