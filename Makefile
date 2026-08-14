@@ -1,35 +1,56 @@
 SHELL := /bin/bash
 
+# DB
+# root_user=root // default
+# root_password=
+#
+# wp_user=wordpress
+# wp_db_name=wp_database
+# wp_user_password=
+#
+# WORDPRES
+# wp_user=wordpress
+# wp_db_name=wp_database
+# wp_user_password=
+#
+# root_username=mobenais
+# root_email=mobenais@email.fr
+# root_password=
+#
+# user_username=user
+# user_email=user@email.fr
+# user_password=
+#
+#
+# NGINX
 
-secrets:
-	@mkdir -p secrets; \
-	sudo docker swarm init 2>/dev/null || true; \
-	credentials=$$(openssl rand -hex 16); \
-	db_password=$$(openssl rand -hex 16); \
-	db_root_password=$$(openssl rand -hex 16); \
-	echo -n "$$credentials" > secrets/credentials.txt; \
-	echo -n "$$db_password" > secrets/db_password.txt; \
-	echo -n "$$db_root_password" > secrets/db_root_password.txt; \
-	i=1; \
-	for file in secrets/*; do \
-		name=$$(basename $$file); \
-		printf "[\033[32mSecret\033[0m $$i] Creating secret $$name... \n"; \
-		sudo docker secret create $$name $$file > /dev/null || echo "secret $$name already exists, skipping"; \
-		i=$$((i + 1)); \
-	done; \
-	sudo docker swarm leave --force; \
-	passwords=("$$credentials" "$$db_password" "$$db_root_password"); \
-	index=0; \
-	while read -r line; do \
-		if [[ -z "$$line" || "$$line" == \#* ]]; then \
-			echo "$$line"; \
-			continue; \
-		fi; \
-		key="$${line%%=*}"; \
-		echo "$${key}=$${passwords[$$index]}"; \
-		index=$$((index + 1)); \
-	done < .env.example > .env; \
+secrets:	
+	mkdir -p secrets
+	touch secrets/credentials.txt secrets/db_password.txt secrets/db_root_password.txt
+
+	cat /dev/urandom | base32 | head -c 32 > secrets/credentials.txt
+	cat /dev/urandom | base32 | head -c 32 > secrets/db_password.txt
+	cat /dev/urandom | base32 | head -c 32 > secrets/db_root_password.txt
 	rm .env.example
+
+	
+
+	read -p "Enter root database username: " answer; \
+	read -p "Enter root database password: " password; \
+	read -p "Enter database name: " dbname; \
+	read -p "Enter database username: " dbuser; \
+
+	for file in secrets/*; do \
+	    line=$$(cat "$$file"); \
+	    if [[ "$$file" == *"credentials.txt" ]]; then \
+	        echo "CREDENTIALS=$$line" >> .env; \
+	    elif [[ "$$file" == *"db_password.txt" ]]; then \
+	        echo "DB_PASSWORD=$$line" >> .env; \
+	    elif [[ "$$file" == *"db_root_password.txt" ]]; then \
+	        echo "DB_ROOT_PASSWORD=$$line" >> .env; \
+		fi \
+	done
+
 
 clean:
 	@rm -rf secrets
