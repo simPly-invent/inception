@@ -4,7 +4,7 @@ secrets:
 	@rm -f .env.example
 	@mkdir -p secrets
 	@touch secrets/db_root_password.txt secrets/db_password.txt secrets/wp_password.txt secrets/user_password.txt
-	@cp /home/mobenais/secrets/.default_conf.txt .
+
 
 	@cat /dev/urandom | base32 | head -c 32 > secrets/db_root_password.txt
 	@cat /dev/urandom | base32 | head -c 32 > secrets/db_password.txt
@@ -19,6 +19,7 @@ secrets:
 	read -p "Enter your config mode (0 = default, 1 = custom): " config_mode; \
 	if [ "$$config_mode" -eq 0 ]; then \
 		echo "Using default configuration."; \
+		cp /home/mobenais/secrets/.default_conf.txt . ;\
 		mapfile -t conf < .default_conf.txt; \
 		rm .default_conf.txt; \
 		wp_db_name="$${conf[0]}"; \
@@ -47,7 +48,12 @@ secrets:
 	echo "WP_USER_USERNAME=$$wp_user_username" >> srcs/.env; \
 	echo "WP_USER_EMAIL=$$wp_user_email" >> srcs/.env; \
 	echo "WP_USER_PASSWORD=$$wp_user_password" >> srcs/.env; \
-	echo ".env generated successfully."
+	printf "[\033[32mmessage\033[0m] .env generated successfully."
+
+
+
+secret_re:
+	make clean && make secrets
 
 clean:
 	@rm -rf secrets
@@ -64,4 +70,4 @@ clean:
 	@echo "WP_USER_USERNAME=" >> .env.example
 	@echo "WP_USER_EMAIL=" >> .env.example
 	@echo "WP_USER_PASSWORD=" >> .env.example
-	@printf "\033[32mCleaned up secrets and .env file. .env.example has been reset.\033[0m\n"
+	@printf "[\033[32mmessage\033[0m] Cleaned up secrets and .env file. .env.example has been reset.\n"
