@@ -36,11 +36,11 @@ secrets:
 		read -p "Enter WordPress regular user username: " wp_user_username; \
 		read -p "Enter WordPress regular user email: " wp_user_email; \
 	fi; \
-	echo "MYSQL_ROOT_USER=$$root_user" > srcs/.env; \
-	echo "MYSQL_ROOT_PASSWORD=$$root_db_password" >> srcs/.env; \
-	echo "MYSQL_DATABASE=$$wp_db_name" >> srcs/.env; \
-	echo "MYSQL_USER=$$wp_user" >> srcs/.env; \
-	echo "MYSQL_PASSWORD=$$wp_password" >> srcs/.env; \
+	echo "DB_ROOT_USER=$$root_user" > srcs/.env; \
+	echo "DB_ROOT_PASSWORD=$$root_db_password" >> srcs/.env; \
+	echo "NAME_DATABASE=$$wp_db_name" >> srcs/.env; \
+	echo "DB_USER=$$wp_user" >> srcs/.env; \
+	echo "DB_PASSWORD=$$wp_password" >> srcs/.env; \
 	echo "WP_ADMIN_USER=$$wp_admin_user" >> srcs/.env; \
 	echo "WP_ADMIN_EMAIL=$$wp_admin_email" >> srcs/.env; \
 	echo "WP_ADMIN_PASSWORD=$$wp_admin_password" >> srcs/.env; \
@@ -53,11 +53,11 @@ clean:
 	@rm -rf secrets
 	@rm -f srcs/.env
 	@rm -f .default_conf.txt
-	@echo "MYSQL_ROOT_USER=" > .env.example
-	@echo "MYSQL_ROOT_PASSWORD=" >> .env.example
-	@echo "MYSQL_DATABASE=" >> .env.example
-	@echo "MYSQL_USER=" >> .env.example
-	@echo "MYSQL_PASSWORD=" >> .env.example
+	@echo "DB_ROOT_USER=" > .env.example
+	@echo "DB_ROOT_PASSWORD=" >> .env.example
+	@echo "DB_DATABASE=" >> .env.example
+	@echo "DB_USER=" >> .env.example
+	@echo "DB_PASSWORD=" >> .env.example
 	@echo "WP_ADMIN_USER=" >> .env.example
 	@echo "WP_ADMIN_EMAIL=" >> .env.example
 	@echo "WP_ADMIN_PASSWORD=" >> .env.example
