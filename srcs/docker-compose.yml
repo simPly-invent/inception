@@ -16,6 +16,37 @@ services:
       - inception
     restart: on-failure
 
+  nginx:
+      build:
+        context: requirements/nginx
+        dockerfile: Dockerfile
+      container_name: nginx
+      image: nginx
+      ports:
+        - "443:443"
+      networks:
+        - inception
+      restart: unless-stopped
+
+  wordpress:
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    container_name: wordpress
+    image: wordpress
+    env_file:
+      - /home/mobenais/Documents/tes/srcs/.env
+    environment:
+      WP_ADMIN_USER: ${WP_ADMIN_USER}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD}
+      WP_USER_USERNAME: ${WP_USER_USERNAME}
+      WP_USER_EMAIL: ${WP_USER_EMAIL}
+      WP_USER_PASSWORD: ${WP_USER_PASSWORD}
+    networks:
+      - inception
+    restart: on-failure
+
 networks:
   inception:
     driver: bridge
