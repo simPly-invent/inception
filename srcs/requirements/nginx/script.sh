@@ -1,4 +1,0 @@
-#!/bin/bash
-
-
-@ssl -req 
