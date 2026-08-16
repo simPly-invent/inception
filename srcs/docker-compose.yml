@@ -47,6 +47,19 @@ services:
       - inception
     restart: on-failure
 
+
+volumes:
+  mariadb_data:
+    driver: local
+  wordpress_data:
+    driver: local
+
 networks:
   inception:
     driver: bridge
+
+secrets:
+  db_password:
+    file: /home/mobenais/Documents/tes/srcs/secrets/db_password.txt
+  db_root_password:
+    file: /home/mobenais/Documents/tes/srcs/secrets/db_root_password.txt
