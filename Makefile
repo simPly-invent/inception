@@ -48,8 +48,14 @@ secrets:
 	echo "WP_USER_USERNAME=$$wp_user_username" >> srcs/.env; \
 	echo "WP_USER_EMAIL=$$wp_user_email" >> srcs/.env; \
 	echo "WP_USER_PASSWORD=$$wp_user_password" >> srcs/.env; \
+	cd srcs && echo "PATH_ENV=$$(pwd)/.env" >> .env && cd .. ; \
+	cd secrets && echo "PATH_SECRETS_DB_PASS=$$(pwd)/db_password.txt" >> ../srcs/.env && cd .. ; \
+	cd secrets && echo "PATH_SECRETS_DB_ROOT_PASS=$$(pwd)/db_root_password.txt" >> ../srcs/.env && cd .. ; \
 	printf "[\033[32mmessage\033[0m] .env generated successfully."
 
+build:
+	@make clean && make secrets
+	@cd srcs && docker compose up --build
 
 
 secret_re:
@@ -70,4 +76,5 @@ clean:
 	@echo "WP_USER_USERNAME=" >> .env.example
 	@echo "WP_USER_EMAIL=" >> .env.example
 	@echo "WP_USER_PASSWORD=" >> .env.example
+	@echo "ENV_PATH=" >> .env.example
 	@printf "[\033[32mmessage\033[0m] Cleaned up secrets and .env file. .env.example has been reset.\n"

@@ -6,15 +6,19 @@ services:
     container_name: mariadb
     image: mariadb
     env_file:
-      - /home/mobenais/Documents/tes/srcs/.env
+      - ${PATH_ENV}
     environment:
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       NAME_DATABASE: ${NAME_DATABASE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+    secrets:
+      - db_password
+      - db_root_password
     networks:
       - inception
     restart: on-failure
+
 
   nginx:
       build:
@@ -35,7 +39,7 @@ services:
     container_name: wordpress
     image: wordpress
     env_file:
-      - /home/mobenais/Documents/tes/srcs/.env
+      - ${PATH_ENV}
     environment:
       WP_ADMIN_USER: ${WP_ADMIN_USER}
       WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
@@ -60,6 +64,6 @@ networks:
 
 secrets:
   db_password:
-    file: /home/mobenais/Documents/tes/srcs/secrets/db_password.txt
+    file: ${PATH_SECRETS_DB_PASS}
   db_root_password:
-    file: /home/mobenais/Documents/tes/srcs/secrets/db_root_password.txt
+    file: ${PATH_SECRETS_DB_ROOT_PASS}
