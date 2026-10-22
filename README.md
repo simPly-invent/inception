@@ -126,6 +126,15 @@ make build     # build the images and start the stack
 
 Then open `https://mobenais.42.fr` (accept the self-signed certificate).
 
+### Access the database
+
+From the host, open a MariaDB shell as root:
+
+```sh
+docker exec -it mariadb bash
+mysql -uroot -p"$(cat /run/secrets/db_root_password)"
+```
+
 ### Clean
 
 ```sh
