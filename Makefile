@@ -54,7 +54,9 @@ secrets:
 	printf "[\033[32mmessage\033[0m] .env generated successfully."
 
 build:
-	@make clean && make secrets
+	@if [ ! -d secrets ]; then \
+	make clean && make secrets; \
+	fi
 	@cd srcs && docker compose up --build
 
 

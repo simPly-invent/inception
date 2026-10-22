@@ -47,6 +47,8 @@ services:
       WP_USER_USERNAME: ${WP_USER_USERNAME}
       WP_USER_EMAIL: ${WP_USER_EMAIL}
       WP_USER_PASSWORD: ${WP_USER_PASSWORD}
+    depends_on:
+      - mariadb
     networks:
       - inception
     restart: on-failure
