@@ -59,6 +59,8 @@ build:
 	fi
 	@cd srcs && docker compose up --build
 
+down:
+	@cd srcs && docker compose down -v
 
 secret_re:
 	make clean && make secrets
@@ -79,4 +81,4 @@ clean:
 	@echo "WP_USER_EMAIL=" >> .env.example
 	@echo "WP_USER_PASSWORD=" >> .env.example
 	@echo "ENV_PATH=" >> .env.example
-	@printf "[\033[32mmessage\033[0m] Cleaned up secrets and .env file. .env.example has been reset.\n"
+	@printf "\n[\033[32mmessage\033[0m] Cleaned up secrets and .env file. .env.example has been reset.\n"
