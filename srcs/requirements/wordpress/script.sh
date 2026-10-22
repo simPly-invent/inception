@@ -22,7 +22,7 @@ if [ ! -f "${WP_PATH}/wp-config.php" ]; then
         --allow-root
 
     wp core install \
-        --url="localhost" \
+        --url="https://mobenais.42.fr" \
         --title="Inception" \
         --admin_user="${WP_ADMIN_USER}" \
         --admin_password="${WP_ADMIN_PASSWORD}" \
