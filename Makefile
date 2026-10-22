@@ -13,13 +13,13 @@ secrets:
 
 	@root_user="root"; \
 	root_db_password=$$(cat secrets/db_root_password.txt); \
-	wp_password=$$(cat secrets/wp_password.txt); \
+	wp_password=$$(cat secrets/db_password.txt); \
 	wp_admin_password=$$(cat secrets/user_password.txt); \
 	wp_user_password=$$(cat secrets/user_password.txt); \
 	read -p "Enter your config mode (0 = default, 1 = custom): " config_mode; \
 	if [ "$$config_mode" -eq 0 ]; then \
 		echo "Using default configuration."; \
-		cp /home/mobenais/secrets/.default_conf.txt . ;\
+		cp /home/dje/secrets/.default_conf.txt . ;\
 		mapfile -t conf < .default_conf.txt; \
 		rm .default_conf.txt; \
 		wp_db_name="$${conf[0]}"; \

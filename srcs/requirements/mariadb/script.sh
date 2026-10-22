@@ -8,10 +8,14 @@ DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 if [ ! -f /var/lib/mysql/.initialized ]; then
     mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null 2>&1
     mysqld --user=mysql --datadir=/var/lib/mysql --skip-networking &
-    sleep 5
+    until mysqladmin ping --silent; do
+        sleep 1
+    done
     mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}'; FLUSH PRIVILEGES;"
-    mysql -uroot -p"${DB_ROOT_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS ${NAME_DATABASE}; CREATE USER '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}'; GRANT ALL PRIVILEGES ON ${NAME_DATABASE}.* TO '${DB_USER}'@'%'; FLUSH PRIVILEGES;"
+    mysql -uroot -p"${DB_ROOT_PASSWORD}" -e "CREATE DATABASE IF NOT EXISTS \`${NAME_DATABASE}\`; CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}'; ALTER USER '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}'; GRANT ALL PRIVILEGES ON \`${NAME_DATABASE}\`.* TO '${DB_USER}'@'%'; FLUSH PRIVILEGES;"
     mysqladmin -uroot -p"${DB_ROOT_PASSWORD}" shutdown
+    wait
+    touch /var/lib/mysql/.initialized
 fi
 
 exec mysqld --user=mysql --datadir=/var/lib/mysql --bind-address=0.0.0.0

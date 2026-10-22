@@ -7,6 +7,9 @@ RUN apt-get update && \
     mv wp-cli.phar /usr/local/bin/wp && \
     rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /run/php && \
+    sed -i "s|^listen = .*|listen = 9000|" /etc/php/8.2/fpm/pool.d/www.conf
+
 COPY script.sh /usr/local/bin/script.sh
 
 RUN chmod +x /usr/local/bin/script.sh
