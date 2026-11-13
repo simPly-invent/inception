@@ -19,15 +19,12 @@ secrets:
 	read -p "Enter your config mode (0 = default, 1 = custom): " config_mode; \
 	if [ "$$config_mode" -eq 0 ]; then \
 		echo "Using default configuration."; \
-		cp /home/dje/secrets/.default_conf.txt . ;\
-		mapfile -t conf < .default_conf.txt; \
-		rm .default_conf.txt; \
-		wp_db_name="$${conf[0]}"; \
-		wp_user="$${conf[1]}"; \
-		wp_admin_user="$${conf[2]}"; \
-		wp_admin_email="$${conf[3]}"; \
-		wp_user_username="$${conf[4]}"; \
-		wp_user_email="$${conf[5]}"; \
+		wp_db_name="wordpress"; \
+		wp_user="wp_user"; \
+		wp_admin_user="mobenais"; \
+		wp_admin_email="mobenais@student.42lyon.fr"; \
+		wp_user_username="author"; \
+		wp_user_email="author@student.42lyon.fr"; \
 	else \
 		echo "Using custom configuration."; \
 		read -p "Enter WordPress database name: " wp_db_name; \
